@@ -23,7 +23,7 @@ func readFile(filePath string) ([]string, error) {
 	}
 
 	// The number of lines can't be even:
-	// 1st line for lawn dimentions and every mower needs 2 lines (position & instructions)
+	// 1st line for lawn dimensions and every mower needs 2 lines (position & instructions)
 	if len(fileLines)%2 == 0 {
 		return nil, errors.New("File lines number is even")
 	}
@@ -31,21 +31,27 @@ func readFile(filePath string) ([]string, error) {
 	return fileLines, nil
 }
 
-func parseDimentions(firstLine string) (int, int, error) {
-	dimentions := strings.Split(firstLine, " ")
+func parseDimensions(firstLine string) (int, int, error) {
+	dimensions := strings.Split(firstLine, " ")
 
-	if len(dimentions) != 2 {
+	if len(dimensions) != 2 {
 		return 0, 0, errors.New("First line should contain 2 numbers: width and length")
 	}
 
-	width, err := strconv.Atoi(dimentions[1])
+	width, err := strconv.Atoi(dimensions[0])
 	if err != nil {
 		return 0, 0, err
 	}
+	if width < 1 {
+		return 0, 0, errors.New("Lawn width is out of range")
+	}
 
-	length, err := strconv.Atoi(dimentions[0])
+	length, err := strconv.Atoi(dimensions[1])
 	if err != nil {
 		return 0, 0, err
+	}
+	if length < 1 {
+		return 0, 0, errors.New("Lawn length is out of range")
 	}
 
 	return width, length, nil
