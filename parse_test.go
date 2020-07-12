@@ -167,7 +167,7 @@ func TestParseOverFlowDimensions(t *testing.T) {
 func TestParseDefaultPosition(t *testing.T) {
 	expectedX, expectedY, expectedO := 0, 1, "N"
 
-	x, y, o, err := parsePosition("1 2 N", Lawn{5, 5})
+	x, y, o, err := parsePosition("1 2 N", Lawn{5, 5, nil})
 	if err != nil {
 		t.Error(err)
 	}
@@ -179,7 +179,7 @@ func TestParseDefaultPosition(t *testing.T) {
 func TestParseDefaultPosition2(t *testing.T) {
 	expectedX, expectedY, expectedO := 99, 0, "S"
 
-	x, y, o, err := parsePosition("100 1 S", Lawn{100, 1})
+	x, y, o, err := parsePosition("100 1 S", Lawn{100, 1, nil})
 	if err != nil {
 		t.Error(err)
 	}
@@ -189,7 +189,7 @@ func TestParseDefaultPosition2(t *testing.T) {
 }
 
 func TestParse4FieldsPosition(t *testing.T) {
-	x, y, o, err := parsePosition("34 @ 7 E", Lawn{100, 1})
+	x, y, o, err := parsePosition("34 @ 7 E", Lawn{100, 1, nil})
 	if err.Error() != "Position line should contain 3 characters: X, Y, and O" {
 		t.Error(err)
 	}
@@ -197,7 +197,7 @@ func TestParse4FieldsPosition(t *testing.T) {
 }
 
 func TestParseZeroPosition(t *testing.T) {
-	x, y, o, err := parsePosition("3 0 N", Lawn{5, 5})
+	x, y, o, err := parsePosition("3 0 N", Lawn{5, 5, nil})
 	if err.Error() != "Y coordinate out of bound" {
 		t.Error(err)
 	}
@@ -205,7 +205,7 @@ func TestParseZeroPosition(t *testing.T) {
 }
 
 func TestParseBoundPosition(t *testing.T) {
-	x, y, o, err := parsePosition("3 6 W", Lawn{2, 15})
+	x, y, o, err := parsePosition("3 6 W", Lawn{2, 15, nil})
 	if err.Error() != "X coordinate out of bound" {
 		t.Error(err)
 	}

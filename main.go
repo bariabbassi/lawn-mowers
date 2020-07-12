@@ -3,12 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"sync"
 )
-
-type Lawn struct {
-	Width  int
-	Length int
-}
 
 func main() {
 	// Read file
@@ -27,24 +23,42 @@ func main() {
 	fmt.Println("Lawn: ", lawn)
 
 	// Parse mowers
-	var mowers []Mower
+	var wg sync.WaitGroup
+	wg.Add(len(fileLines) / 2)
 	for i := 1; i < len(fileLines); i += 2 {
+		go func(index int) {
+			// Parse mower position
+			x, y, orientation, err := parsePosition(fileLines[index], lawn)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		// Parse position
-		x, y, orientation, err := parsePosition(fileLines[i], lawn)
-		if err != nil {
-			log.Fatal(err)
-		}
+			// Parse mower instructions
+			instructions, err := parseInstructions(fileLines[index+1])
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		// Parse instructions
-		instructions, err := parseInstructions(fileLines[i+1])
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		mower := Mower{x, y, orientation, instructions}
-		mower.move(lawn)
-		mowers = append(mowers, mower)
+			// Add mower to the lawn
+			lawn.addMower(Mower{x, y, orientation, instructions})
+			wg.Done()
+		}(i)
 	}
-	fmt.Println("Mowers: ", mowers)
+	// Wait for all mowers to be added to the lawn
+	wg.Wait()
+
+	// Move mowers
+	wg.Add(len(lawn.Mowers))
+	for i := 0; i < len(lawn.Mowers); i++ {
+		go func(index int) {
+			err := lawn.moveMower(index)
+			if err != nil {
+				log.Fatal(err)
+			}
+			wg.Done()
+		}(i)
+	}
+	// Wait for all instructions to be executed
+	wg.Wait()
+	fmt.Println("Mowers: ", lawn.Mowers)
 }

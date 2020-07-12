@@ -7,63 +7,28 @@ type Mower struct {
 	Instructions []string
 }
 
-func (m *Mower) move(lawn Lawn) {
-	for _, instruction := range m.Instructions {
-		switch instruction {
-		case "L":
-			m.turnLeft()
-		case "R":
-			m.turnRight()
-		case "F":
-			m.moveForward(lawn)
-		}
-		m.Instructions = m.Instructions[1:]
+func (mower *Mower) turnLeft() {
+	switch mower.Orientation {
+	case "N":
+		mower.Orientation = "W"
+	case "E":
+		mower.Orientation = "N"
+	case "W":
+		mower.Orientation = "S"
+	case "S":
+		mower.Orientation = "E"
 	}
 }
 
-func (m *Mower) turnLeft() {
-	switch m.Orientation {
+func (mower *Mower) turnRight() {
+	switch mower.Orientation {
 	case "N":
-		m.Orientation = "W"
+		mower.Orientation = "E"
 	case "E":
-		m.Orientation = "N"
+		mower.Orientation = "S"
 	case "W":
-		m.Orientation = "S"
+		mower.Orientation = "N"
 	case "S":
-		m.Orientation = "E"
-	}
-}
-
-func (m *Mower) turnRight() {
-	switch m.Orientation {
-	case "N":
-		m.Orientation = "E"
-	case "E":
-		m.Orientation = "S"
-	case "W":
-		m.Orientation = "N"
-	case "S":
-		m.Orientation = "W"
-	}
-}
-
-func (m *Mower) moveForward(lawn Lawn) {
-	switch m.Orientation {
-	case "N":
-		if m.Y+1 < lawn.Length {
-			m.Y++
-		}
-	case "E":
-		if m.X+1 < lawn.Width {
-			m.X++
-		}
-	case "W":
-		if m.X-1 >= 0 {
-			m.X--
-		}
-	case "S":
-		if m.Y-1 >= 0 {
-			m.Y--
-		}
+		mower.Orientation = "W"
 	}
 }
