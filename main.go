@@ -12,7 +12,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("File lines: ", fileLines)
 
 	// Parse lawn dimensions
 	var lawn Lawn
@@ -20,7 +19,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Lawn: ", lawn)
 
 	// Parse mowers
 	var wg sync.WaitGroup
@@ -60,5 +58,7 @@ func main() {
 	}
 	// Wait for all instructions to be executed
 	wg.Wait()
-	fmt.Println("Mowers: ", lawn.Mowers)
+
+	// Display result (one-indexed)
+	fmt.Print(lawn)
 }

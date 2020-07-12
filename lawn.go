@@ -2,12 +2,22 @@ package main
 
 import (
 	"errors"
+	"fmt"
 )
 
+// Lawn to be mowed
 type Lawn struct {
 	Width  int
 	Length int
 	Mowers []Mower
+}
+
+func (lawn Lawn) String() string {
+	output := ""
+	for _, mower := range lawn.Mowers {
+		output += fmt.Sprintf("%d %d %s\n", mower.X+1, mower.Y+1, mower.Orientation)
+	}
+	return output
 }
 
 func (lawn *Lawn) addMower(mower Mower) {

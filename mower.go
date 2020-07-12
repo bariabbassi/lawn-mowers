@@ -1,5 +1,6 @@
 package main
 
+// Mower position and instructions
 type Mower struct {
 	X            int
 	Y            int
